@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <title>Page Title</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <style>
+        html, body { width: 100%; height: 100%; }
+        body { margin: 0; background: #444 }
+        body { display: flex; flex-direction: row; justify-content: center; }
+        #wrapper { width: 70vmin; background: #111 }
+        #song_picker { display: flex; width: 70vmin; min-height: 100%; flex-direction: column; justify-content: center; }
+        .song { display: flex; flex-direction: column; text-align: center; margin: 2vmin 0; padding: 2vmin 0 2vmin; background: #000 }
+        .song img { height: 20vmin; margin-bottom: 2vmin; object-fit: contain; }
+        .song { color: #fff; font-size: 3vmin; line-height: 2vmin; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;}
+
+        canvas {
+            background: #006;
+        }
+        #song_buffer { display: none }
+        #wrapper.song_select canvas { display: none }
+        #wrapper.song_play #song_picker { display: none }
+        #wrapper { position: relative; }
+        #debug_info { position: absolute; top: 0; color: #fff }
+        #debug_info div { background: #444; color: #ff0 }
+    </style>
+</head>
+<body>
+    <div id="wrapper" class="song_select">
+        <div id="song_picker"></div>
+        <div id="song_buffer"></div>
+        <canvas id="canvas"></canvas>    
+        <div id="debug_info"></div>
+        <script src='main.js'></script>
+    </div>
+</body>
+</html>

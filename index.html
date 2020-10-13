@@ -8,7 +8,7 @@
         html, body { width: 100%; height: 100%; }
         body { margin: 0; background: #444 }
         body { display: flex; flex-direction: row; justify-content: center; }
-        #wrapper { width: 70vmin; background: #111 }
+        #view { width: 70vmin; background: #111 }
         #song_picker { display: flex; width: 70vmin; min-height: 100%; flex-direction: column; justify-content: center; }
         .song { display: flex; flex-direction: column; text-align: center; margin: 2vmin 0; padding: 2vmin 0 2vmin; background: #000 }
         .song img { height: 20vmin; margin-bottom: 2vmin; object-fit: contain; }
@@ -18,20 +18,16 @@
             background: #006;
         }
         #song_buffer { display: none }
-        #wrapper.song_select canvas { display: none }
-        #wrapper.song_play #song_picker { display: none }
-        #wrapper { position: relative; }
+        #view.song_select canvas { display: none }
+        #view.song_play #song_picker { display: none }
+        #view { position: relative; }
         #debug_info { position: absolute; top: 0; color: #fff }
         #debug_info div { background: #444; color: #ff0 }
     </style>
 </head>
 <body>
-    <div id="wrapper" class="song_select">
-        <div id="song_picker"></div>
-        <div id="song_buffer"></div>
-        <canvas id="canvas"></canvas>    
-        <div id="debug_info"></div>
-        <script src='main.js'></script>
-    </div>
+    <div id="view"></div>
+    <script src='src/lib/Script.js'></script>
+    <script>Script('src/js/', 'main')</script>
 </body>
 </html>

@@ -1,6 +1,4 @@
-const repeat = (x, fn) => { for (let i = 0; i < x; fn(i++)); }
-
-const APP = (() => {
+const APP2 = (() => {
     
     const jssmFiles = [
         'Awe of She',
@@ -28,35 +26,11 @@ const APP = (() => {
     })
 
 
-    const parseJssm = text => text
-        .replace(/(\/\/[^\n\r]*[\n\r]+)/g, '')
-        .split(';')
-        .map(x => x.trim().split(':'))
-        .filter(x => x[0])
-        .map(([key, ...value]) => [ key.substring(1).toLowerCase(), value ])
-        .map(([key, values]) => {
-            switch (key) {
-                default: return [key, values[0] > 0 || values[0] < 0 ? values[0] * 1000 : values[0]]
-                case 'bpms': return [key, Object.fromEntries(values[0].split(',').map(s => s.split('=').map(x => x * 1000)))]
-                case 'notes':
-            }
-            const pattern = values.pop()
-            return ['pattern', values.map(v => v.trim()).join(':'), pattern.trim()]
-        })
-        .reduce((data, [key, values, pattern]) =>
-            Object.assign(
-                data,
-                key === 'pattern'
-                    ? { patterns: [ ...(data.patterns || []), { meta: values, pattern }] }
-                    : { [key]: values }
-            ),
-            {}
-        )
 
     const jssms = {}
     const loadJssmFiles = async () => {
         const jssmsAsText = await Promise.all(jssmFiles.map(
-            jssmFile => script.fetch(`${jssmFile}/${jssmFile}.js`)
+            jssmFile => script.fetch(`songs/${jssmFile}/${jssmFile}.js`)
                 .then(scriptsBufferedData.get)
         ))
         const jssmsData = jssmsAsText.map(parseJssm)
@@ -64,7 +38,7 @@ const APP = (() => {
         const jssms = {}
         jssmsData.forEach(jssm => {
             const { title, background, banner, bpms, music, offset, patterns } = jssm
-            songPickerDom.innerHTML += `<div class="song" onclick='APP.playSong("${title}")'><img src="${title}/${banner}"}/>${title}</div>`
+            songPickerDom.innerHTML += `<div class="song" onclick='APP.playSong("${title}")'><img src="songs/${title}/${banner}"}/>${title}</div>`
             jssms[title] = {
                 title,
                 background,
@@ -140,9 +114,9 @@ APP.playSong = songName => {
 
     document.getElementById('wrapper').className = 'song_play'
     document.getElementById('song_buffer').innerHTML = `
-        <img id="song_background" src="${title}/${background}">
-        <img id="song_banner" src="${title}/${banner}">
-        <audio id="song_music" autoplay="true"><source src="${title}/${music}"></audio>
+        <img id="song_background" src="songs/${title}/${background}">
+        <img id="song_banner" src="songs/${title}/${banner}">
+        <audio id="song_music" autoplay="true"><source src="songs/${title}/${music}"></audio>
     `
 
     let songMusicDom
@@ -222,3 +196,4 @@ APP.playSong = songName => {
         setTimeout(drawLoop, 16)
     }
 }
+

@@ -1,12 +1,14 @@
 const Script = (() => {
+    const extractPathFrom = s => s.substring(0, s.lastIndexOf('/') + 1)
+
     const DOC = document
-    const HREF = DOC.location.href
-    const HOME = HREF.substring(0, HREF.lastIndexOf('/') + 1)
-    const ERR = 'ERR'
+    const HOME = extractPathFrom(DOC.location.href)
     const HEAD = DOC.head
 
+    const minPath = p => `"${decodeURI(p.replace(HOME, ''))}"`
+
     let rootPath
-    const APP = { foo: 'baz' }
+    const APP = {}
     const scripts = {}
 
     const fetchScript = (path, src) => {
@@ -15,12 +17,12 @@ const Script = (() => {
         const script = DOC.createElement('script')
         script.src = src.replace(/\/\/*/g, '/')
         src = script.src
-        console.log(`IMPORT ${src}`)
+        console.log(`[get] ${minPath(src)}`)
         return new Promise((resolve, reject) => {
             HEAD.append(script)
             script.onload = () => {
                 HEAD.removeChild(script)
-                console.log(`  DONE ${src}`)
+                // console.log(`[end] ${minPath(src)}`)
                 return resolve(scripts[src])
             }
             script.onerror = reject
@@ -29,22 +31,17 @@ const Script = (() => {
 
     const executeScript = fn => {
         const { src } = Script
-        console.log(`   RUN ${src}`)
-        const result = fn(APP)
-        scripts[src] = result
-        return result
+        console.log(`[RUN] ${minPath(src)}`)
+        return scripts[src] = fn(APP)
     }
 
     const executeScriptObj = (obj) => {
         const { src } = Script
-        console.log('   SET ' + src, obj)
+        console.log(`[SET] ${minPath(src)}`)
         return scripts[src] = obj
     }
 
-    const currentScriptPath = () => {
-        const fullfilepath = (document.currentScript || {}).src
-        return fullfilepath.substring(0, fullfilepath.lastIndexOf('/') + 1)
-    }
+    const currentScriptPath = () => extractPathFrom((DOC.currentScript || {}).src)
 
     const script = (...args) => {
         const firstArg = args[0]
